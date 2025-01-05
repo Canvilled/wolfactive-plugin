@@ -1,0 +1,15 @@
+header{
+    br{
+        display: none;
+    }
+}
+.ss-option, .pll-switcher-select{
+    text-transform: uppercase;
+}
+.ss-main:focus{
+    box-shadow: none;
+}
+
+.ss-content .ss-list .ss-option.ss-highlighted, .ss-content .ss-list .ss-option:not(.ss-disabled).ss-selected,.ss-content .ss-list .ss-option:hover{
+    background: var(--wp-admin-theme-color);
+}
