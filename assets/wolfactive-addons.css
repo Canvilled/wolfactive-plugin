@@ -3,7 +3,7 @@ header{
         display: none;
     }
 }
-.ss-option, .pll-switcher-select{
+.ss-option, .wolfactive-polylang-switcher{
     text-transform: uppercase;
 }
 .ss-main:focus{

@@ -1,12 +1,16 @@
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('wolfactive-addons.js loaded');
-    const langToggle = document.querySelector('.pll-switcher-select');
+    const langToggle = document.querySelector('.wolfactive-polylang-switcher');
     if (!langToggle) return;
 
     new SlimSelect({
         select: langToggle,
         settings: {
             showSearch: false,
+        },
+        events:{
+            afterChange: (value) => {
+                window.location.href = value[0].value;
+            }
         }
     })
 })
