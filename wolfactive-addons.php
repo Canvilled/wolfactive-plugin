@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The plugin bootstrap file
  *
@@ -25,75 +24,31 @@
  * Domain Path:       /languages
  */
 
-// If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
+
+require 'vendor/autoload.php';
+
+use WA\Addon\Filters\WA_Filter_Navigator;
+use WA\Addon\Shortcodes\Polylang_Custom;
+use WA\Addon\WA_Notices;
+use WA\Addon\WA_Register_Assets;
+
+// Abort if the file is accessed directly.
+if (!defined('ABSPATH')) {
+    exit;
 }
+
+define('WOLFACTIVE_ADDONS_PLUGIN_URL_DIR', plugin_dir_url( __FILE__ ));
 
 /**
- * Currently plugin version.
- * Start at version 1.0.0 and use SemVer - https://semver.org
- * Rename this for your plugin and update it as you release new versions.
+ * Initialize required classes for the plugin.
  */
-define( 'WOLFACTIVE_ADDONS_VERSION', '1.0.1' );
-
-if ( !class_exists( 'Polylang' ) ) {
-    add_action( 'admin_notices', 'wolfactive_polylang_notice' );
+function initialize_plugin_classes(): void
+{
+    new WA_Notices();
+    new WA_Register_Assets();
+    new Polylang_Custom();
+    new WA_Filter_Navigator();
 }
 
-function wolfactive_polylang_notice() {
-    ?>
-    <div class="notice notice-error">
-        <p><?php _e( 'Polylang plugin is required for Wolfactive Addons. Please install and activate it.', 'wolfactive-addons' ); ?></p>
-        <p><a href="<?php echo esc_url( admin_url( 'plugin-install.php?s=polylang&tab=search&type=term' ) ); ?>" class="button button-primary"><?php _e( 'Install Polylang', 'wolfactive-addons' ); ?></a></p>
-    </div>
-    <?php
-}
-
-// Register and enqueue JavaScript file
-add_action( 'wp_enqueue_scripts', 'wolfactive_enqueue_scripts' );
-
-function wolfactive_enqueue_scripts() {
-    wp_enqueue_script( 'choices-script', 'https://unpkg.com/slim-select@latest/dist/slimselect.min.js', array(), null, true );
-    wp_enqueue_script( 'wolfactive-script', plugin_dir_url( __FILE__ ) . 'assets/wolfactive-addons.js', array('choices-script'), WOLFACTIVE_ADDONS_VERSION, true );
-}
-
-// Register and enqueue CSS file
-add_action( 'wp_enqueue_scripts', 'wolfactive_enqueue_styles' );
-
-function wolfactive_enqueue_styles() {
-    wp_enqueue_style( 'choices-css', 'https://unpkg.com/slim-select@latest/dist/slimselect.css', array(), null );
-    wp_enqueue_style( 'wolfactive-style', plugin_dir_url( __FILE__ ) . 'assets/wolfactive-addons.css', array('choices-css'), WOLFACTIVE_ADDONS_VERSION );
-}
-
-
-// Add shortcode for Polylang language switcher
-add_shortcode( 'polylang_switcher', 'wolfactive_polylang_switcher' );
-
-function wolfactive_polylang_switcher() {
-    if ( function_exists( 'pll_the_languages' ) ) {
-        $languages = pll_the_languages([
-            "dropdown" => 1,
-            "hide_current" => 0,
-            "show_flags" => 1,
-            "raw" => 1,
-            'display_names_as' => 'slug'
-        ]);
-        $output = '<select class="wolfactive-polylang-switcher">';
-        if ($languages) {
-            foreach ($languages as $lang) {
-                // $url returns the URL of the language, if the page exist in this language.
-                if ($lang['current_lang']) {
-                    $output .= '<option selected lang="'.$lang['locale'].'" value="' . $lang['url'] . '" class="wolfactive-polylang-switcher__item">' . $lang['name'] . '</option>';
-                }else{
-
-                    $output .= '<option lang="'.$lang['locale'].'" value="' . $lang['url'] . '" class="wolfactive-polylang-switcher__item">' . $lang['name'] . '</option>';
-                }
-            }
-        }
-        $output .= '</select>';
-        return $output;
-    } else {
-        return __( 'Polylang plugin is not active.', 'wolfactive-addons' );
-    }
-}
+// Run plugin initialization.
+initialize_plugin_classes();

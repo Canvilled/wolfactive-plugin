@@ -1,0 +1,17 @@
+{
+  "name": "wolfactive/wolfactive-addons-plugin",
+  "description": "Wolfactive Addons Plugin",
+  "type": "wordpress-plugin",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+        "name": "Huy Nguyen - Wolfactive",
+        "email": "huyminhnguyenpham@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "WA\\Addon\\": "app/"
+    }
+  }
+}
